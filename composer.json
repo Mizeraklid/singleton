@@ -1,0 +1,11 @@
+{
+    "require": {
+        "bruli/php-git-hooks": "^4.8"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"file_exists('php-git-hooks.yml') || copy('php-git-hooks.yml.example', 'php-git-hooks.yml');\"",
+            "cp vendor/bruli/php-git-hooks/src/PhpGitHooks/Infrastructure/Hook/commit-msg .git/hooks"
+        ]
+    }
+}

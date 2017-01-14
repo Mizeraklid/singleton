@@ -1,1 +1,7 @@
 .idea
+### Composer ###
+composer.phar
+vendor/
+composer.lock
+php-git-hooks.yml
+.idea/

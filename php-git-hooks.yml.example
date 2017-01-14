@@ -1,0 +1,52 @@
+pre-commit:
+    enabled: false
+    execute:
+        composer: false
+        jsonlint: false
+        phplint: false
+        phpmd:
+            enabled: false
+            options: null
+        phpcs:
+            enabled: false
+            standard: null
+        php-cs-fixer:
+            enabled: false
+            levels:
+                psr0: false
+                psr1: false
+                psr2: false
+                symfony: false
+            options: null
+        phpunit:
+            enabled: false
+            random-mode: false
+            options: null
+            strict-coverage:
+                enabled: false
+                minimum: null
+            guard-coverage:
+                enabled: false
+                message: null
+    message:
+        right-message: ''
+        error-message: ''
+commit-msg:
+    enabled: true
+    regular-expression: "^(add|del|change|update|fix|doc|test|build|dump) [a-zA-Z!\"№%;:?*()~@#$^&+-_=\\|\\\/' ]+$"
+pre-push:
+    enabled: false
+    execute:
+        phpunit:
+            enabled: false
+            random-mode: false
+            options: null
+            strict-coverage:
+                enabled: false
+                minimum: null
+            guard-coverage:
+                enabled: false
+                message: null
+    message:
+        right-message: ''
+        error-message: ''

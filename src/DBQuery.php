@@ -1,12 +1,12 @@
 <?php
-require __DIR__  . '\Interfaces\DBQueryInterface.php';
+require __DIR__ . '\Interfaces\DBQueryInterface.php';
 
 class DBQuery implements DBQueryInterface
 {
     /**
      * @var DB
      */
-    private static $DB;
+    private $DB;
     private $lastQueryTime = null;
     private $startTime;
 
@@ -28,7 +28,7 @@ class DBQuery implements DBQueryInterface
      */
     public function getDBConnection()
     {
-        return self::$DB;
+        return $this->DB;
     }
 
     /**
@@ -40,7 +40,7 @@ class DBQuery implements DBQueryInterface
      */
     public function setDBConnection(DBConnectionInterface $DBConnection)
     {
-        self::$DB = $DBConnection;
+        $this->DB = $DBConnection;
     }
 
     /**
@@ -53,11 +53,15 @@ class DBQuery implements DBQueryInterface
      */
     public function query($query, $params = null)
     {
-        $this->setStartTime();
-        $sth = self::$DB->getPdoInstance()->prepare($query);
-        $sth->execute($params);
-        $this->endTime();
-        return $sth;
+        try {
+            $this->setStartTime();
+            $sth = $this->DB->getPdoInstance()->prepare($query);
+            $sth->execute($params);
+            $this->endTime();
+            return $sth;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 
     /**
@@ -70,7 +74,8 @@ class DBQuery implements DBQueryInterface
      */
     public function queryAll($query, array $params = null)
     {
-        $sth = $this->query($query,$params);
+        $sth = $this->query($query, $params);
+
         return $sth->fetchAll();
     }
 
@@ -84,8 +89,10 @@ class DBQuery implements DBQueryInterface
      */
     public function queryRow($query, array $params = null)
     {
-        $sth = $this->query($query,$params);
-        return $sth->fetchAll()[0];
+        $sth = $this->query($query, $params);
+        $result = $sth->fetchAll();
+
+        return count($result) > 1 ? $result[0] : [];
     }
 
     /**
@@ -98,7 +105,8 @@ class DBQuery implements DBQueryInterface
      */
     public function queryColumn($query, array $params = null)
     {
-        $sth = $this->query($query,$params);
+        $sth = $this->query($query, $params);
+
         return $sth->fetchAll(PDO::FETCH_COLUMN);
     }
 
@@ -112,7 +120,8 @@ class DBQuery implements DBQueryInterface
      */
     public function queryScalar($query, array $params = null)
     {
-        $sth = $this->query($query,$params);
+        $sth = $this->query($query, $params);
+
         return $sth->fetchColumn();
     }
 
@@ -130,14 +139,17 @@ class DBQuery implements DBQueryInterface
     {
         $sth = $this->query($query, $params);
         $count = $sth->rowCount();
+
         return $count;
     }
 
-    private function setStartTime(){
+    private function setStartTime()
+    {
         $this->startTime = microtime();
     }
 
-    private function endTime(){
+    private function endTime()
+    {
         $this->lastQueryTime = microtime() - $this->startTime;
     }
 

@@ -1,20 +1,38 @@
 <?php
-require __DIR__  . '\Interfaces\DBConnectionInterface.php';
+require __DIR__ . '\Interfaces\DBConnectionInterface.php';
 
 class DB implements DBConnectionInterface
 {
     /**
      * @var PDO
      */
-    private static $PDO = null;
-    private static $_instance = null;
+    protected $PDO = null;
+    protected static $_instance = [];
 
-    private static $dsn;
-    private static $username;
-    private static $password;
+    private $dsn;
+    private $username;
+    private $password;
 
-    final private function __construct()
+    private function __construct($key)
     {
+    }
+
+    final private function __clone()
+    {
+    }
+
+    function __wakeup()
+    {
+    }
+
+    function __toString()
+    {
+        return $this->dsn . $this->username;
+    }
+
+    function __destruct()
+    {
+        $this->close();
     }
 
     /**
@@ -31,22 +49,29 @@ class DB implements DBConnectionInterface
 
     public static function connect($dsn, $username = '', $password = '')
     {
-        if(is_null(self::$_instance))
-        {
-            self::$_instance = new self();
+        if (!key_exists($dsn . $username, self::$_instance)){
+            self::$_instance[$dsn . $username] = null;
         }
-        if (self::$PDO === null) {
-            self::setPDOParams($dsn, $username, $password);
-            self::$PDO = new PDO($dsn, $username, $password);
+        if (is_null(self::$_instance[$dsn . $username])) {
+            self::$_instance[$dsn . $username] = new self($dsn . $username);
         }
-
-        return self::$_instance;
+        $tempInstance = self::$_instance[$dsn . $username];
+        if ($tempInstance->PDO === null) {
+            $tempInstance->setPDOParams($dsn, $username, $password);
+            $tempInstance->PDO = new PDO($dsn, $username, $password);
+        }
+        //if ($tempInstance::$dsn =='mysql:dbname=game;host=localhost') {
+            //echo '<pre>' . print_r($tempInstance->$dsn, true) . '</pre>';
+            //exit;
+        //}
+        return $tempInstance;
     }
 
-    private static function setPDOParams($dsn, $username, $password){
-        self::$dsn = $dsn;
-        self::$username = $username;
-        self::$password = $password;
+    protected function setPDOParams($dsn, $username, $password)
+    {
+        $this->dsn = $dsn;
+        $this->username = $username;
+        $this->password = $password;
     }
 
     /**
@@ -57,7 +82,7 @@ class DB implements DBConnectionInterface
     public function reconnect()
     {
         $this->close();
-        self::connect(self::$dsn, self::$username, self::$password);
+        self::connect($this->dsn, $this->username, $this->password);
     }
 
     /**
@@ -67,7 +92,7 @@ class DB implements DBConnectionInterface
      */
     public function getPdoInstance()
     {
-        return self::$PDO;
+        return $this->PDO;
     }
 
     /**
@@ -80,7 +105,7 @@ class DB implements DBConnectionInterface
      */
     public function getLastInsertID($sequenceName = null)
     {
-        return self::$PDO->lastInsertId($sequenceName);
+        return $this->PDO->lastInsertId($sequenceName);
     }
 
     /**
@@ -91,8 +116,8 @@ class DB implements DBConnectionInterface
      */
     public function close()
     {
-        if (self::$PDO !== null) {
-            self::$PDO = null;
+        if ($this->PDO !== null) {
+            $this->PDO = null;
         }
     }
 
@@ -109,7 +134,7 @@ class DB implements DBConnectionInterface
      */
     public function setAttribute($attribute, $value)
     {
-        return self::$PDO->setAttribute($attribute, $value);
+        return $this->PDO->setAttribute($attribute, $value);
     }
 
     /**
@@ -122,6 +147,6 @@ class DB implements DBConnectionInterface
      */
     public function getAttribute($attribute)
     {
-        return self::$PDO->getAttribute($attribute);
+        return $this->PDO->getAttribute($attribute);
     }
 }

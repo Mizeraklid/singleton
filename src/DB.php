@@ -60,10 +60,6 @@ class DB implements DBConnectionInterface
             $tempInstance->setPDOParams($dsn, $username, $password);
             $tempInstance->PDO = new PDO($dsn, $username, $password);
         }
-        //if ($tempInstance::$dsn =='mysql:dbname=game;host=localhost') {
-            //echo '<pre>' . print_r($tempInstance->$dsn, true) . '</pre>';
-            //exit;
-        //}
         return $tempInstance;
     }
 

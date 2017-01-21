@@ -55,7 +55,7 @@ class DBQuery implements DBQueryInterface
     {
         try {
             $this->setStartTime();
-            $sth = $this->DB->getPdoInstance()->prepare($query);
+            $sth = $this->getDBConnection()->getPdoInstance()->prepare($query);
             $sth->execute($params);
             $this->endTime();
             return $sth;

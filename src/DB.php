@@ -49,10 +49,7 @@ class DB implements DBConnectionInterface
 
     public static function connect($dsn, $username = '', $password = '')
     {
-        if (!key_exists($dsn . $username, self::$_instance)){
-            self::$_instance[$dsn . $username] = null;
-        }
-        if (is_null(self::$_instance[$dsn . $username])) {
+        if (!key_exists($dsn . $username, self::$_instance) || is_null(self::$_instance[$dsn . $username])) {
             self::$_instance[$dsn . $username] = new self($dsn . $username);
         }
         $tempInstance = self::$_instance[$dsn . $username];
@@ -101,7 +98,7 @@ class DB implements DBConnectionInterface
      */
     public function getLastInsertID($sequenceName = null)
     {
-        return $this->PDO->lastInsertId($sequenceName);
+        return $this->getPdoInstance()->lastInsertId($sequenceName);
     }
 
     /**
@@ -112,7 +109,7 @@ class DB implements DBConnectionInterface
      */
     public function close()
     {
-        if ($this->PDO !== null) {
+        if ($this->getPdoInstance() !== null) {
             $this->PDO = null;
         }
     }
@@ -130,7 +127,7 @@ class DB implements DBConnectionInterface
      */
     public function setAttribute($attribute, $value)
     {
-        return $this->PDO->setAttribute($attribute, $value);
+        return $this->getPdoInstance()->setAttribute($attribute, $value);
     }
 
     /**
@@ -143,6 +140,6 @@ class DB implements DBConnectionInterface
      */
     public function getAttribute($attribute)
     {
-        return $this->PDO->getAttribute($attribute);
+        return $this->getPdoInstance()->getAttribute($attribute);
     }
 }

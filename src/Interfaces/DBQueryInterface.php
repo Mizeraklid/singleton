@@ -1,4 +1,5 @@
 <?php
+namespace DB\Interfaces;
 
 interface DBQueryInterface
 {
@@ -66,7 +67,6 @@ interface DBQueryInterface
      */
     public function queryColumn($query, array $params = null);
 
-
     /**
      * Executes the SQL statement and returns the first field of the first row of the result.
      *
@@ -88,7 +88,6 @@ interface DBQueryInterface
      * @return integer number of rows affected by the execution.
      */
     public function execute($query, array $params = null);
-
 
     /**
      * Returns the last query execution time in seconds

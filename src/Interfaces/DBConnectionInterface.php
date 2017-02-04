@@ -1,4 +1,5 @@
 <?php
+namespace DB\Interfaces;
 
 interface DBConnectionInterface
 {
@@ -70,8 +71,5 @@ interface DBConnectionInterface
      * @see http://php.net/manual/en/pdo.setattribute.php
      */
     public function getAttribute($attribute);
-
-
-
 
 }

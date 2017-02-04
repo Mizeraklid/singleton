@@ -1,5 +1,8 @@
 <?php
 
+use DB\DB;
+use DB\DBQuery;
+
 require __DIR__  . '\DB.php';
 
 require __DIR__ . '\DBQuery.php';

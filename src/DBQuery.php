@@ -1,4 +1,11 @@
 <?php
+namespace DB;
+
+use DB\Interfaces\DBConnectionInterface;
+use DB\Interfaces\DBQueryInterface;
+use PDO;
+use PDOException;
+
 require __DIR__ . '\Interfaces\DBQueryInterface.php';
 
 class DBQuery implements DBQueryInterface
@@ -58,6 +65,7 @@ class DBQuery implements DBQueryInterface
             $sth = $this->getDBConnection()->getPdoInstance()->prepare($query);
             $sth->execute($params);
             $this->endTime();
+
             return $sth;
         } catch (PDOException $e) {
             return false;

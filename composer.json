@@ -1,11 +1,19 @@
 {
-    "require": {
-        "bruli/php-git-hooks": "^4.8"
+    "name" : "mizerakl/singleton",
+    "description" : "Multyton to connect databases",
+    "version" : "1.0.0",
+    "license" : "MIT",
+    "require" : {
+        "bruli/php-git-hooks" : "^4.8",
+        "php": ">=5.4"
     },
-    "scripts": {
-        "post-install-cmd": [
+    "scripts" : {
+        "post-install-cmd" : [
             "php -r \"file_exists('php-git-hooks.yml') || copy('php-git-hooks.yml.example', 'php-git-hooks.yml');\"",
             "cp vendor/bruli/php-git-hooks/src/PhpGitHooks/Infrastructure/Hook/commit-msg .git/hooks"
         ]
+    },
+    "autoload" :{
+        "psr-4": {"DB\\": ["src/"]}
     }
 }

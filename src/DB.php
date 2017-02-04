@@ -1,4 +1,10 @@
 <?php
+namespace DB;
+
+use DB\Interfaces\DBConnectionInterface;
+use PDO;
+use PDOException;
+
 require __DIR__ . '\Interfaces\DBConnectionInterface.php';
 
 class DB implements DBConnectionInterface
@@ -49,7 +55,7 @@ class DB implements DBConnectionInterface
 
     public static function connect($dsn, $username = '', $password = '')
     {
-        if (!key_exists($dsn . $username, self::$_instance) || is_null(self::$_instance[$dsn . $username])) {
+        if ( ! key_exists($dsn . $username, self::$_instance) || is_null(self::$_instance[$dsn . $username])) {
             self::$_instance[$dsn . $username] = new self($dsn . $username);
         }
         $tempInstance = self::$_instance[$dsn . $username];
@@ -57,6 +63,7 @@ class DB implements DBConnectionInterface
             $tempInstance->setPDOParams($dsn, $username, $password);
             $tempInstance->PDO = new PDO($dsn, $username, $password);
         }
+
         return $tempInstance;
     }
 

@@ -1,8 +1,14 @@
 {
-    "name" : "Mizeraklid/singleton",
+    "name" : "mizeraklid/singleton",
     "description" : "Multyton to connect databases",
     "version" : "1.0.0",
     "license" : "MIT",
+    "authors": [
+      {
+      "name": "Mudryk Artur",
+      "email": "mudrik_aa@groupbwt.com"
+    }
+  ],
     "require" : {
         "bruli/php-git-hooks" : "^4.8",
         "php": ">=5.4"
@@ -15,5 +21,14 @@
     },
     "autoload" :{
         "psr-4": {"DB\\": ["src/"]}
+    },
+    "config": {
+        "secure-http": false
+    },
+    "repositories": [
+    {
+      "type": "vcs",
+      "url": "http://gitlab.groupbwt.com/Mudryk/L4-1.git"
     }
+  ],
 }

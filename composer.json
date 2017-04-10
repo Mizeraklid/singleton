@@ -1,7 +1,7 @@
 {
     "name" : "mizeraklid/singleton",
     "description" : "Multyton to connect databases",
-    "version" : "1.0.0",
+    "version" : "1.0.1",
     "license" : "MIT",
     "authors": [
       {
